@@ -56,7 +56,6 @@ def calculer_distance_annuelle_par_mode_transport(fichier_csv):
     return distance_annuelle_par_transport_plus_annee
 
 
-
 @app.get('/co2GenereParDeplacementsPro')
 def calculer_quantite_annuelle_de_co2_induite():
     fichier_csv = 'csv/test.csv'
@@ -66,9 +65,9 @@ def calculer_quantite_annuelle_de_co2_induite():
     try:
         for annee in distance_annuelle_par_transport_plus_annee.keys():
             for moyen_de_transport in distance_annuelle_par_transport_plus_annee[annee].keys():
-                if moyen_de_transport in facteurs_emission.keys():
+                if ((moyen_de_transport in facteurs_emission.keys()) and (str(annee) in facteurs_emission[moyen_de_transport].keys())):
                     taux_co2_par_moyen_de_transport = distance_annuelle_par_transport_plus_annee[annee][moyen_de_transport] * facteurs_emission[moyen_de_transport][str(annee)]
-                    if len(taux_annuel_de_co2_par_moyen_de_transport) == 0:
+                    if annee not in taux_annuel_de_co2_par_moyen_de_transport.keys():
                         taux_annuel_de_co2_par_moyen_de_transport[annee] = {moyen_de_transport: taux_co2_par_moyen_de_transport}
                     else:
                         taux_annuel_de_co2_par_moyen_de_transport[annee][moyen_de_transport] = taux_co2_par_moyen_de_transport

@@ -1,0 +1,21 @@
+# Dossiers générés automatiquement
+__pycache__/
+*.pyc
+
+# Environnement virtuel
+venv/
+.env
+
+# Fichiers de logs
+*.log
+
+# Fichiers de sauvegarde
+*.bak
+*.swp
+
+# Fichiers de configuration locaux
+*.ini
+*.env
+
+# Dossiers et fichiers spécifiques à Docker
+docker-compose.override.yml
