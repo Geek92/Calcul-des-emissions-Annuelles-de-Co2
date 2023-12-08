@@ -1,8 +1,28 @@
 from fastapi import FastAPI
 import csv
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+#permets d'autoriser des requetes venant de notre frontend etant données 
+#qu'il a des origines differentes de celles du backend 
+origins = [
+    "http://localhost",
+    "http://localhost:1234",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+#on configure fastapi pour servir les fichiers statiques depuis le dossier frontend
+#app.mount("/static", StaticFiles(directory="/app/frontend"), name="static")
 
 #les facteurs d'emission liés aux transports
 facteurs_emission = {"Avion court courrier,sans traînées":{"2022":0.1416, "2020":0.1412},

@@ -1,7 +1,19 @@
 version: '3'
-
 services:
-  app:
-    build: .
+  backend:
+    build: ./backend # Chemin vers le Dockerfile du back-end
     ports:
-      - "8000:80" # Fait correspondre le port local 8000 au port exposé du conteneur
+      - "80:80" # Port pour le back-end
+    networks:
+      - mynetwork
+
+  frontend:
+    build: ./frontend # Chemin vers le Dockerfile du front-end
+    ports:
+      - "1234:1234" # Port pour le front-end
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
