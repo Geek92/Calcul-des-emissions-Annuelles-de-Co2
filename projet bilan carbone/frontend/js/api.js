@@ -72,6 +72,7 @@ export async function createAnnualEmissionsChart(data) {
                 }
             }
         });
+        //return myChart;
     } catch (error) {
         console.error('Erreur lors de la création du diagramme :', error);
     }
