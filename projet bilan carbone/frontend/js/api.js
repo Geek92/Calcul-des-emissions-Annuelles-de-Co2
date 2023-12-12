@@ -17,14 +17,15 @@ export async function getdataFromServer(url) {
     }
 }
 
+//cette fonction récupere les données retorunées par la fonction getdataFromServer() et crée le graphe 
 export async function createAnnualEmissionsChart(data) {
     try {
 
-        // on crée des tableaux distincts pour les labels (années) et les datasets (valeurs par client et ou service) 
+        //on crée des tableaux distincts pour les labels (années) et les datasets (valeurs par client et ou service) 
         const labels = Object.keys(data);
         const datasets = [];
 
-        // Sélectionner le client ou le service ayant le plus de données
+        //on sélectionne le client ou le service ayant le plus de données
         let maxDataCount = 0;
         let exactCategory = '';
         for (const year of labels) {
@@ -72,7 +73,6 @@ export async function createAnnualEmissionsChart(data) {
                 }
             }
         });
-        //return myChart;
     } catch (error) {
         console.error('Erreur lors de la création du diagramme :', error);
     }

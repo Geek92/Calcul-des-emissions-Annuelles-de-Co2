@@ -1,9 +1,8 @@
 /* styles.css */
 
-/* Changer la couleur de fond de la page */
+
 body {
     background-color: #f0f0f0;
-    /* Remplacez cette couleur par celle de votre choix */
     display: grid;
     place-items: center;
     height: 100vh;
@@ -11,13 +10,11 @@ body {
 }
 
 select#selection {
-    font-size: 18px;
-    /* Modifiez cette valeur selon la taille souhaitée */
+    font-size: 16px;
 }
 
 .container {
     max-width: 800px;
-    /* Largeur maximale du conteneur */
     width: 100%;
     padding: 20px;
     text-align: center;
@@ -28,7 +25,6 @@ select#selection {
 
 .title {
     color: #336699;
-    /* Couleur du titre */
     margin-top: 20px;
 }
 
@@ -37,9 +33,4 @@ select#selection {
     height: auto;
     margin-top: 0px;
     margin-left: 0px;
-}
-
-form p {
-    font-weight: bold;
-    /* Mettre en gras le texte du paragraphe */
 }

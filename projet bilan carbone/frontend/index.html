@@ -8,15 +8,12 @@
     <h1 class = "title"> Rapport Sur Les Emissions Annuelles de CO2  </h1>
     <img src ="img/téléchargement.jpeg"/>
     <form> 
-      <p>Selectectionner l'élement à visualiser</p>
       <select id ="selection">
+        <option value="" disabled selected hidden>Selectectionner une option</option>
         <option value = "deplacements_pro">quantité de co2 induite par les déplacements professionnels</option>
         <option value = "déplacements_domicile_travail">quantité de co2 induite par les déplacements domicile-travail</option>
       </select>
     </form>
-    <!-- <div style="width: 500px;"><canvas id="dimensions"></canvas></div><br/> -->
     <div style="width: 800px;"><canvas id="acquisitions"></canvas></div>
-
-    <!-- <script type="module" src="dimensions.js"></script> -->
     <script type="module" src="js/acquisitions.js"></script>
 </html>
