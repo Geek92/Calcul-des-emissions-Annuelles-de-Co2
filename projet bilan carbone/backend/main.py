@@ -67,6 +67,23 @@ facteurs_emission = {"Avion court courrier,sans traînées":{"2022":0.1416, "202
                     "Bateau oceanographique local sans couchage à bord":{"2019": 7.6}
                      }
 
+def calculer_valeur_Co2_par_interpolation_lineaire(annee_1,annee_2,annee_actuelle,valeur_co2_annee_1,valeur_co2_annee_2):
+    """
+    Description: retourne le facteur d'emission correspondant à l'année actuelle obtenu par interpolation lineaire
+    Args:
+    annee_1(int): année qui vient juste avant l'année actuelle.
+    annee_2(int): année qui vient juste apres l'année actuelle.
+    annee_actuelle (int): l'anné pour laquelle on desire récuperer le facteur d'émission.
+    valeur_co2_annee_1(float): le facteur d'émission correspondant à l'année 1
+    valeur_co2_annee_2(float): le facteur d'émission correspondant à l'année 2
+    
+    Returns:
+    float : facteur d'émission correspondant à l'année actuelle.
+    """
+    valeur_Co2_annee_actuelle = valeur_co2_annee_1 + (valeur_co2_annee_2 - valeur_co2_annee_1) * ((annee_actuelle - annee_1)/(annee_2 - annee_1))
+    return valeur_Co2_annee_actuelle
+
+
 def valeur_co2_correspondant_au_mode_transport(mode_transport,annee):
     """
     Description: retourne le facteur d'emission du moyen de transport passé en parametre.
@@ -76,12 +93,41 @@ def valeur_co2_correspondant_au_mode_transport(mode_transport,annee):
     Returns:
     int : facteur d'émission du mode de transport.
     """
-    valeur_co2_facteur_emission = 0.0
+    valeur_co2_annee_1,valeur_co2_annee_2,valeur_co2_facteur_emission = 0.0,0.0,0.0
+    annee_1,annee_2,annee_actuelle = 0,0,0
     str_annee = str(annee)
+    #on crée une liste triée contenant les clés du dictionaire facteurs_emission[mode_transport] converties en entiers 
+    liste_cles = list()
     for key in facteurs_emission.keys():
-        if key == mode_transport and (str_annee in facteurs_emission[mode_transport].keys()):
-            valeur_co2_facteur_emission = facteurs_emission[key][str_annee]
-            break
+        if key == mode_transport:
+            liste_cles = list(int(key) for key in sorted(facteurs_emission[mode_transport].keys()))
+            liste_cles.insert(0,0)
+            taille = len(liste_cles)
+            if str_annee in facteurs_emission[mode_transport].keys():
+                valeur_co2_facteur_emission = facteurs_emission[mode_transport][str_annee]
+                break
+            elif annee < liste_cles[len(liste_cles) - 1]:
+                    min, max = 0,0
+                    #on trouve la valeur juste avant année
+                    indice = 0
+                    while liste_cles[indice] < annee:
+                        min = liste_cles[indice]
+                        indice +=1
+                    #on trouve la valeur apres année
+                    for valeur in liste_cles:
+                        if valeur > annee:
+                            max = valeur
+                            break
+                    annee_1 = min
+                    annee_2 = max
+                    annee_actuelle = annee
+                    valeur_co2_annee_1 = facteurs_emission[mode_transport][str(annee_1)] if annee_1 != 0 else 0
+                    valeur_co2_annee_2 = facteurs_emission[mode_transport][str(annee_2)]
+                    valeur_co2_facteur_emission = calculer_valeur_Co2_par_interpolation_lineaire(annee_1,annee_2,annee_actuelle,valeur_co2_annee_1,valeur_co2_annee_2)
+            else:
+                #dans ce cas on renvoie les données liées à l'année la plus recente
+                valeur_co2_facteur_emission = facteurs_emission[mode_transport][str(liste_cles[len(liste_cles) - 1])]
+
     return valeur_co2_facteur_emission 
 
 
@@ -134,13 +180,14 @@ def calculer_quantite_co2_deplacement_domicile_travavail():
         lecteur_csv = csv.DictReader(csv_file)
         for line in lecteur_csv:
             annee = line['Année']
+            anneeInt = int(annee)
             distance = int(line['Distance domicile travail'])
             mode_transport = line['Mode de transport']
             nombre_jours = int(line['Nombre de jours travaillé'])
             service = line['Service']
             distance_annuelle = distance * nombre_jours * 2
             #on calcule la valeur de co2 equivalent à la distance annuelle parcourue
-            valeur_co2 = valeur_co2_correspondant_au_mode_transport(mode_transport,annee)
+            valeur_co2 = valeur_co2_correspondant_au_mode_transport(mode_transport,anneeInt)
             valeur_annuelle_co2 = distance_annuelle * valeur_co2
             if annee not in quantite_co2_deplacement_domicile_travavail.keys():
                 quantite_co2_deplacement_domicile_travavail[annee] ={service:valeur_annuelle_co2}
