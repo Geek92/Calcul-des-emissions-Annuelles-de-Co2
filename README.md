@@ -1,6 +1,5 @@
-# projet EES
 
-# Application pour le calcul des emissions  Annuelles de Co2  liées aux déplacements
+# Application pour le calcul des emissions  Annuelles de Co2  liées aux déplacements dans une entreprise
 
 ## Description 
 
